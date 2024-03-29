@@ -1,5 +1,7 @@
 # Week 2 Testing Questions
 
+[//]: # (What I should have done initially was create a branch then use a pull request. ohwell.) 
+
 ### Select a number of testable functions from the code of your application, or features from the application to be tested with the input domain modeling. Make sure to have a good reason for your selection.
 The tests.py file contains functions we will be testing. The functions are:
 `toint32`, `sign_extend_24bit`, `sign_extend_2bit`, `_trycast`.
