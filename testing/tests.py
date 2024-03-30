@@ -60,7 +60,6 @@ class TestSignExtend24Bit(unittest.TestCase):
     
     def test_overflow_integer(self):
         """Test with an integer beyond the 24-bit range"""
-        # Testing behavior when the input exceeds 24 bits
         self.assertEqual(sign_extend_24bit(0x01FFFFFF), toint32(0xFFFFFFFF))
     
     def test_zero(self):
@@ -85,9 +84,6 @@ class TestSignExtend24Bit(unittest.TestCase):
 class TestSignExtend2Bit(unittest.TestCase):
     def test_positive_integer(self):
         """Test with a positive integer that does not require sign extension"""
-        # 0x00 is positive; no extension needed
-        self.assertEqual(sign_extend_2bit(0x00), 0x00)
-        # 0x01 is positive; no extension needed
         self.assertEqual(sign_extend_2bit(0x01), 0x01)
     
     def test_negative_integer(self):
@@ -98,8 +94,7 @@ class TestSignExtend2Bit(unittest.TestCase):
         self.assertEqual(sign_extend_2bit(0x03), -1)
     
     def test_overflow_integer(self):
-        """Test with an integer beyond the 2-bit range, though it's not strictly an 'overflow'"""
-        # Behavior might not be defined for values beyond the intended 2-bit, using a 4-bit value as example
+        """Test with an integer beyond the 2-bit range"""
         self.assertEqual(sign_extend_2bit(0x0F), toint32(0xFFFFFFFF))
     
     def test_zero(self):
