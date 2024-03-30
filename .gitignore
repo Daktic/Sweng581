@@ -18,3 +18,4 @@ __pycache__
 /build-docs
 
 /.venv
+.DS_Store
