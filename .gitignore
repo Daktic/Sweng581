@@ -17,3 +17,4 @@ __pycache__
 /*.sh
 /build-docs
 
+/.venv
