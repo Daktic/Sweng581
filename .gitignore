@@ -17,3 +17,5 @@ __pycache__
 /*.sh
 /build-docs
 
+/.venv
+.DS_Store
