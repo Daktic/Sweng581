@@ -1,17 +1,26 @@
 import sys
 import os
 import unittest
+import logging
 from struct import error as StructError
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', 'orangebox')))
 from orangebox.tools import toint32, sign_extend_24bit, sign_extend_2bit, _trycast
 
-
-# class MyTestCase(unittest.TestCase):
-#     def test_something(self):
-#         self.assertEqual(True, False)  # add assertion here
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class TestToint32(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        print("----------------------------------------------------------------------")
+        print("TEST FUNCTION: toint32")
+        print("----------------------------------------------------------------------")
+        cls.result = None
+
+    def setUp(self):
+        self.logger = logging.getLogger(self.id())
+
     def test_positive_number(self):
         """Test conversion with a positive number"""
         self.assertEqual(toint32(123), 123)
@@ -49,6 +58,16 @@ class TestToint32(unittest.TestCase):
             toint32(None)
 
 class TestSignExtend24Bit(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        print("----------------------------------------------------------------------")
+        print("TEST FUNCTION: sign_extend_24bit")
+        print("----------------------------------------------------------------------")
+
+    def setUp(self):
+        self.logger = logging.getLogger(self.id())
+
     def test_positive_integer(self):
         """Test with a positive integer within 24-bit range"""
         self.assertEqual(sign_extend_24bit(0x007FFFFF), 0x007FFFFF)
@@ -82,6 +101,16 @@ class TestSignExtend24Bit(unittest.TestCase):
             sign_extend_24bit(None)
 
 class TestSignExtend2Bit(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        print("----------------------------------------------------------------------")
+        print("TEST FUNCTION: sign_extend_2bit")
+        print("----------------------------------------------------------------------")
+
+    def setUp(self):
+        self.logger = logging.getLogger(self.id())
+
     def test_positive_integer(self):
         """Test with a positive integer that does not require sign extension"""
         self.assertEqual(sign_extend_2bit(0x01), 0x01)
@@ -117,6 +146,16 @@ class TestSignExtend2Bit(unittest.TestCase):
             sign_extend_2bit(None)
 
 class TestTryCast(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        print("----------------------------------------------------------------------")
+        print("TEST FUNCTION: _trycast")
+        print("----------------------------------------------------------------------")
+
+    def setUp(self):
+        self.logger = logging.getLogger(self.id())
+
     def test_hexadecimal_string(self):
         """Test conversion of hexadecimal string to integer."""
         self.assertEqual(_trycast("0x1a"), 26)
@@ -145,5 +184,33 @@ class TestTryCast(unittest.TestCase):
         self.assertEqual(_trycast("+50"), 50)
         self.assertEqual(_trycast("-0.05"), -0.05)
 
+class LoggingTestResult(unittest.TextTestResult):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+    def startTest(self, test):
+        logging.info(f'Starting test: {test._testMethodName}')
+        super().startTest(test)
+    
+    def addSuccess(self, test):
+        logging.info(f'Test passed: {test._testMethodName}\n')
+        super().addSuccess(test)
+    
+    def addError(self, test, err):
+        logging.error(f'Test error: {test._testMethodName}\n')
+        super().addError(test, err)
+    
+    def addFailure(self, test, err):
+        logging.error(f'Test failed: {test._testMethodName}\n')
+        super().addFailure(test, err)
+
+class LoggingTestRunner(unittest.TextTestRunner):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, resultclass=LoggingTestResult, **kwargs)
+
+    def _makeResult(self):
+        return LoggingTestResult(self.stream, self.descriptions, self.verbosity)
+
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(testRunner=LoggingTestRunner())
