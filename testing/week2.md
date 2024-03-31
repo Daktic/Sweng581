@@ -58,7 +58,8 @@ None
 Function coverage for all but _trycast() which will be tested with branch coverage.
 
 ### Define a test set that satisfies the selected coverage criteria.
+See [tests.py](./tests.py)
 
 ### Execute the test cases on the application and report the results.
-
+All 26 Tests Pass.
 
