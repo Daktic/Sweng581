@@ -43,17 +43,17 @@ class TestToint32(unittest.TestCase):
         self.assertEqual(toint32(0), 0)
 
     def test_with_string(self):
-        """Test that passing a string raises a TypeError"""
+        """Test that passing a string raises a StructError"""
         with self.assertRaises(StructError):
             toint32("string")
 
     def test_with_float(self):
-        """Test that passing a float raises a TypeError"""
+        """Test that passing a float raises a StructError"""
         with self.assertRaises(StructError):
             toint32(3.14)
 
     def test_with_none(self):
-        """Test that passing None raises a TypeError"""
+        """Test that passing None raises a StructError"""
         with self.assertRaises(StructError):
             toint32(None)
 
@@ -183,6 +183,8 @@ class TestTryCast(unittest.TestCase):
         self.assertEqual(_trycast(" 100 "), 100)
         self.assertEqual(_trycast("+50"), 50)
         self.assertEqual(_trycast("-0.05"), -0.05)
+        with self.assertRaises((AttributeError)):
+            self.assertEqual(_trycast(None), None)
 
 class LoggingTestResult(unittest.TextTestResult):
     
